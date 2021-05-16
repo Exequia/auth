@@ -1,4 +1,4 @@
-package are.auth.auth.models;
+package are.auth.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +14,7 @@ public class User {
     private Long id;
     private String email;
     private String password;
-    // private String role;
+    private String role;
 
     public Long getId() {
         return id;
@@ -39,10 +39,16 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    // public String getRole() {
-    // return role;
-    // }
-    // public void setRole(String role) {
-    // this.role = role;
-    // }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public User orElseThrow(Object object) {
+        return null;
+    }
 }

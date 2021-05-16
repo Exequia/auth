@@ -1,4 +1,4 @@
-package are.auth.auth;
+package are.auth;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
