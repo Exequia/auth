@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import are.auth.entities.People;
 import are.auth.entities.Role;
 import are.auth.entities.User;
+import are.auth.entities.UserStatus;
 import are.auth.repositories.roles.IRoleRepository;
 import are.auth.repositories.users.IUserRepository;
 
@@ -63,6 +64,10 @@ class AuthApplicationTests {
 		people.setLastName("Real");
 		people.setsurname("Estepa");
 		user.setPeople(people);
+
+		UserStatus status = new UserStatus();
+		status.setId(1L);
+		user.setStatus(status);
 
 		User userData = this.userRepository.save(user);
 
