@@ -1,44 +1,78 @@
 package are.auth.controllers.users;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import are.auth.dtos.UserDTO;
+import are.auth.dtos.UserDTORequest;
+import are.auth.dtos.UserDTOResponse;
 import are.auth.entities.User;
 import are.auth.repositories.users.IUserRepository;
+import are.auth.utils.users.UserUtils;
 
 @RestController
 @RequestMapping("/users")
 public class UserController implements IUserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    
     @Autowired
     private IUserRepository userRepository;
+    @Autowired
+    private UserUtils userUtils;
 
+    @Override
     @GetMapping
-    @PreAuthorize("hasRole('admin') OR hasRole('user')")
-    public Iterable<User> getAllUsers() {
+    @PreAuthorize("hasAnyAuthority('god', 'admin')")
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDTO> getAllUsers() {
         log.info("start getAllUsers");
         Iterable<User> users = userRepository.findAll();
-        users.forEach(user -> System.out.println("user:" + user));
-        log.info("end getAllUsers");
-        return users;
+        List<UserDTO> usersDto = StreamSupport.stream(users.spliterator(), false)
+                .map((user) -> userUtils.convertEntityToDto(user)).collect(Collectors.toList());
+        log.info("end getAllUsers with: " + usersDto.toString());
+        return usersDto;
     }
 
+    @Override
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Optional<User> findByid(@PathVariable Long id) {
-        log.info("start findByid");
+    public UserDTO findByid(@PathVariable Long id) {
+        log.info("start findByid for id: " + id);
         Optional<User> user = userRepository.findById(id);
-        log.info("end findByid");
-        return user;
+        UserDTO userDto = userUtils.convertEntityToDto(user.get());
+        log.info("end findByid with: " + userDto.toString());
+        return userDto;
+    }
+
+    @Override
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public UserDTOResponse saveUser(@RequestBody UserDTORequest userDto) {
+        //TODO: CREAR VALIDADOR
+        log.info("start saveUser for: " + userDto.toString());
+        User user = userUtils.convertDtoToEntity(userDto);
+        user = userRepository.save(user);
+        UserDTOResponse newUserDto = userUtils.convertEntityToDto(user);
+        log.info("end saveUser:" + newUserDto.toString());
+        return newUserDto;
     }
 }

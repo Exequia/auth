@@ -25,7 +25,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserAuthDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         logger.info("Validating Token!!!!!");
         try {
             String jwt = getJwtFromRequest(request);
@@ -33,11 +34,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 logger.info("Token is Valid ");
                 String userNameFromToken = tokenProvider.getUserNameFromToken(jwt);
                 UserPrincipal userDetails = userDetailsService.loadUserByUsername(userNameFromToken);
-                System.out.println(userDetails.getAuthorities());
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                System.out.println("userDetails.getAuthorities: " + userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
