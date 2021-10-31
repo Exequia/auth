@@ -7,6 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 import are.auth.dtos.RoleDTO;
 import are.auth.dtos.UserStatusDTO;
+import are.auth.entities.BetProfile;
+import are.auth.entities.BetStatus;
+import are.auth.utils.bets.BetsUtils;
+import are.auth.utils.bets.IBetsUtils;
 import are.auth.utils.roles.RoleUtils;
 import are.auth.utils.users.UserUtils;
 
@@ -39,4 +43,18 @@ public class AppConfig {
         return new UserStatusDTO();
     }
 
+    @Bean
+    public IBetsUtils betsUtils() {
+        return new BetsUtils();
+    }
+
+    @Bean
+    public BetProfile betProfile() {
+        return new BetProfile();
+    }
+
+    @Bean
+    public BetStatus betStatus() {
+        return new BetStatus();
+    }
 }
