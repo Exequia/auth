@@ -29,6 +29,7 @@ class BetsTests {
 	void saveNewBet_shouldBeValid() {
 		Bet bet = new Bet();
 		bet.setName(name);
+		bet.setConfig("{}");
 
 		BetProfile profile = new BetProfile();
 		profile.setId(1L);

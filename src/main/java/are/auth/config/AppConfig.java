@@ -11,6 +11,7 @@ import are.auth.entities.BetProfile;
 import are.auth.entities.BetStatus;
 import are.auth.utils.bets.BetsUtils;
 import are.auth.utils.bets.IBetsUtils;
+import are.auth.utils.roles.IRoleUtils;
 import are.auth.utils.roles.RoleUtils;
 import are.auth.utils.users.UserUtils;
 
@@ -23,16 +24,18 @@ public class AppConfig {
         return new ModelMapper();
     }
 
+    /* UTILS*/
     @Bean
     public UserUtils userUtils() {
         return new UserUtils();
     }
 
     @Bean
-    public RoleUtils roleUtils() {
+    public IRoleUtils roleUtils() {
         return new RoleUtils();
     }
 
+    /* DTO */
     @Bean
     public RoleDTO roleDTO() {
         return new RoleDTO();
@@ -48,6 +51,7 @@ public class AppConfig {
         return new BetsUtils();
     }
 
+    /* CLASS */
     @Bean
     public BetProfile betProfile() {
         return new BetProfile();

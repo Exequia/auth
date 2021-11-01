@@ -42,7 +42,7 @@ public class BetsController implements IBetsController {
         //TODO: CREAR VALIDADOR
         log.info("start saveBet for: " + betDto.toString());
         Bet bet = betsUtils.convertDtoToEntity(betDto);
-        bet = betsRepository.save(bet);
+        bet = betsUtils.save(bet);
         BetDTO newBetDto = betsUtils.convertEntityToDto(bet);
         log.info("end saveBet:" + newBetDto.toString());
         return newBetDto;

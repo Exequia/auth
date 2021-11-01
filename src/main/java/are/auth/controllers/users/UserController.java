@@ -34,6 +34,7 @@ public class UserController implements IUserController {
     
     @Autowired
     private IUserRepository userRepository;
+    
     @Autowired
     private UserUtils userUtils;
 
