@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Configuration;
 
 import are.auth.dtos.RoleDTO;
 import are.auth.dtos.UserStatusDTO;
-import are.auth.entities.BetProfile;
-import are.auth.entities.BetStatus;
+import are.auth.entities.bets.BetProfile;
+import are.auth.entities.bets.BetStatus;
 import are.auth.utils.bets.BetsUtils;
 import are.auth.utils.bets.IBetsUtils;
 import are.auth.utils.roles.IRoleUtils;

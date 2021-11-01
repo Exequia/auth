@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import are.auth.entities.Bet;
-import are.auth.entities.BetProfile;
+import are.auth.entities.bets.Bet;
+import are.auth.entities.bets.BetProfile;
 import are.auth.repositories.bets.IBetsRepository;
 
 @SpringBootTest

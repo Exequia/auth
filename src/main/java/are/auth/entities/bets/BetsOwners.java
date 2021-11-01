@@ -1,4 +1,4 @@
-package are.auth.entities;
+package are.auth.entities.bets;
 
 import java.util.Date;
 
@@ -16,12 +16,12 @@ public class BetsOwners {
     public BetsOwners() {
     }
 
-    public BetsOwners(BetsOwnersId betsOwnersId) {
-        this.betsOwnersId = betsOwnersId;
+    public BetsOwners(BetsUsersId betsUsersId) {
+        this.betsUsersId = betsUsersId;
     }
 
     @EmbeddedId
-    private BetsOwnersId betsOwnersId;
+    private BetsUsersId betsUsersId;
 
     private Date date = new Date();
 }

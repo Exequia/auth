@@ -1,4 +1,4 @@
-package are.auth.dtos;
+package are.auth.dtos.bets;
 
 import javax.validation.constraints.NotBlank;
 

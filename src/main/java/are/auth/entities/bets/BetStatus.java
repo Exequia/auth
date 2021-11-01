@@ -1,4 +1,4 @@
-package are.auth.entities;
+package are.auth.entities.bets;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

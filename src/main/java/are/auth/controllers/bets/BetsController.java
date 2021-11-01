@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import are.auth.dtos.BetDTO;
-import are.auth.entities.Bet;
+import are.auth.dtos.bets.AddBetDTO;
+import are.auth.dtos.bets.BetDTO;
+import are.auth.entities.bets.AddBet;
+import are.auth.entities.bets.Bet;
 import are.auth.repositories.bets.IBetsRepository;
 import are.auth.utils.bets.IBetsUtils;
 
@@ -82,5 +84,17 @@ public class BetsController implements IBetsController {
         log.info("start deleteById for id: " + id);
         betsRepository.deleteById(id);
         log.info("end deleteById");
+    }
+    @Override
+    @PostMapping("/add")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public AddBetDTO addBet(@RequestBody AddBetDTO addBetDto) {
+        log.info("start addBet for: " + addBetDto.toString());
+        AddBet addBet = betsUtils.convertDtoToEntity(addBetDto);
+        addBet = betsUtils.addBet(addBet);
+        addBetDto.setDate(addBet.getDate());
+        log.info("end addBet:" + addBetDto.toString());
+        return addBetDto;
     }
 }

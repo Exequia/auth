@@ -1,4 +1,4 @@
-package are.auth.entities;
+package are.auth.entities.bets;
 
 import java.io.Serializable;
 
@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Embeddable
-public class BetsOwnersId implements Serializable {
+public class BetsUsersId implements Serializable {
 
-    public BetsOwnersId() {
+    public BetsUsersId() {
     }
 
 

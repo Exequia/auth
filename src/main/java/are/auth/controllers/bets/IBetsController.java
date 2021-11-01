@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import are.auth.dtos.BetDTO;
+import are.auth.dtos.bets.AddBetDTO;
+import are.auth.dtos.bets.BetDTO;
 
 public interface IBetsController {
 
@@ -16,4 +17,6 @@ public interface IBetsController {
     public BetDTO findById(@PathVariable Long id);
 
     public void deleteById(@PathVariable Long id);
+
+    public AddBetDTO addBet(@RequestBody AddBetDTO addBetDto);
 }
