@@ -19,4 +19,6 @@ public interface IBetsController {
     public void deleteById(@PathVariable Long id);
 
     public AddBetDTO addBet(@RequestBody AddBetDTO addBetDto);
+
+    public AddBetDTO findAddedBet(@PathVariable Long betId, @PathVariable Long userId);
 }

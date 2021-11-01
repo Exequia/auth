@@ -23,4 +23,6 @@ public interface IBetsUtils {
     public Iterable<User> saveOwners(Bet bet);
 
     public AddBet addBet(AddBet addBet);
+
+    public AddBetDTO findAddedBet(Long betId, Long userId);
 }

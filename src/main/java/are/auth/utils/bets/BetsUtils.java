@@ -3,6 +3,7 @@ package are.auth.utils.bets;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -116,5 +117,15 @@ public class BetsUtils implements IBetsUtils {
     @Override
     public AddBet addBet(AddBet addBet) {
         return this.betsBetsRepository.save(addBet);
+    }
+
+    @Override
+    public AddBetDTO findAddedBet(Long betId, Long userId) {
+        Optional<Bet> bet = this.betsRepository.findById(betId);
+        BetDTO betDto = this.convertEntityToDto(bet.get());
+        Optional<AddBet> addBet = this.betsBetsRepository.findById(new BetsUsersId(betId, userId));
+        AddBetDTO addBetDTO = this.convertEntityToDto(addBet.get());
+        addBetDTO.setBetData(betDto);
+        return addBetDTO;
     }
 }

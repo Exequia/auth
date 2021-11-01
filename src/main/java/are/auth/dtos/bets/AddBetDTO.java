@@ -18,4 +18,6 @@ public class AddBetDTO {
     private String bet;
 
     private Date date;
+
+    private BetDTO betData;
 }

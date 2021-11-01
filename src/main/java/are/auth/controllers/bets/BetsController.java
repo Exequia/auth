@@ -29,7 +29,7 @@ import are.auth.utils.bets.IBetsUtils;
 @RestController
 @RequestMapping("/bets")
 public class BetsController implements IBetsController {
-    
+
     private static final Logger log = LoggerFactory.getLogger(BetsController.class);
     @Autowired
     private IBetsRepository betsRepository;
@@ -41,7 +41,7 @@ public class BetsController implements IBetsController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public BetDTO saveBet(@RequestBody BetDTO betDto) {
-        //TODO: CREAR VALIDADOR
+        // TODO: CREAR VALIDADOR
         log.info("start saveBet for: " + betDto.toString());
         Bet bet = betsUtils.convertDtoToEntity(betDto);
         bet = betsUtils.save(bet);
@@ -62,7 +62,6 @@ public class BetsController implements IBetsController {
         return betsDTO;
     }
 
-    
     @Override
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -75,7 +74,6 @@ public class BetsController implements IBetsController {
         return betDto;
     }
 
-    
     @Override
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -85,6 +83,7 @@ public class BetsController implements IBetsController {
         betsRepository.deleteById(id);
         log.info("end deleteById");
     }
+
     @Override
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
@@ -96,5 +95,16 @@ public class BetsController implements IBetsController {
         addBetDto.setDate(addBet.getDate());
         log.info("end addBet:" + addBetDto.toString());
         return addBetDto;
+    }
+    
+    @Override
+    @GetMapping("/{betId}/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public AddBetDTO findAddedBet(@PathVariable Long betId, @PathVariable Long userId) {
+        log.info("start findAddedBet for betId: " + betId + " and userId : " + userId);
+        AddBetDTO addBetDTO = betsUtils.findAddedBet(betId, userId);
+        log.info("end findAddedBet with: " + addBetDTO.toString());
+        return addBetDTO;
     }
 }
