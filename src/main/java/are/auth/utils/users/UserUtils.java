@@ -1,5 +1,7 @@
 package are.auth.utils.users;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,7 @@ import are.auth.dtos.UserDTORequest;
 import are.auth.dtos.UserDTOResponse;
 import are.auth.dtos.UserStatusDTO;
 import are.auth.entities.User;
+import are.auth.repositories.users.IUserRepository;
 
 public class UserUtils implements IUserUtils {
 
@@ -26,6 +29,9 @@ public class UserUtils implements IUserUtils {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private IUserRepository userRepository;
 
     @Override
     public UserDTOResponse convertEntityToDto(User user) throws ParseException {
@@ -53,5 +59,10 @@ public class UserUtils implements IUserUtils {
 
         log.info("start convertDtoToEntity: " + user.toString());
         return user;
+    }
+
+    public UserDTOResponse getUserByEmail(String email) {
+        Optional<User> user = this.userRepository.findByEmail(email);
+        return this.convertEntityToDto(user.get());
     }
 }
