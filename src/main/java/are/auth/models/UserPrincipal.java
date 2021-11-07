@@ -14,14 +14,13 @@ public class UserPrincipal implements UserDetails {
 
     private String email;
     private String password;
+    private Collection<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
-
-    private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

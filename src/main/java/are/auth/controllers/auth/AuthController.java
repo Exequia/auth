@@ -4,9 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import are.auth.dtos.UserDTOResponse;
 import are.auth.models.AuthenticateRequest;
 import are.auth.models.JwtAuthenticationResponse;
-import are.auth.models.UserPrincipal;
-import are.auth.services.JWTTokenProvider;
 import are.auth.utils.users.UserUtils;
 
 @RestController
@@ -26,21 +21,13 @@ public class AuthController implements IAuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JWTTokenProvider jwtTokenProvider;
-
-    @Autowired
     private UserUtils userUtils;
 
     @Override
     @PostMapping
     public ResponseEntity<JwtAuthenticationResponse> authenticateUser(
             @RequestBody AuthenticateRequest authenticateRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                authenticateRequest.getEmail(), authenticateRequest.getPassword()));
-        String token = jwtTokenProvider.generateToken((UserPrincipal) authentication.getPrincipal());
+        String token = this.userUtils.getToken(authenticateRequest);
         UserDTOResponse user = this.userUtils.getUserByEmail(authenticateRequest.getEmail());
         log.info("Token Created: " + token.toString());
         log.info("User: " + user.toString());

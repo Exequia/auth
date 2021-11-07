@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +25,10 @@ import are.auth.dtos.UserDTO;
 import are.auth.dtos.UserDTORequest;
 import are.auth.dtos.UserDTOResponse;
 import are.auth.entities.User;
+import are.auth.models.JwtAuthenticationResponse;
+import are.auth.models.UserPrincipal;
 import are.auth.repositories.users.IUserRepository;
+import are.auth.services.JWTTokenProvider;
 import are.auth.utils.users.UserUtils;
 
 @RestController
@@ -37,6 +42,9 @@ public class UserController implements IUserController {
     
     @Autowired
     private UserUtils userUtils;
+    
+    @Autowired
+    private JWTTokenProvider jwtTokenProvider;
 
     @Override
     @GetMapping
@@ -67,13 +75,13 @@ public class UserController implements IUserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public UserDTOResponse saveUser(@RequestBody UserDTORequest userDto) {
-        //TODO: CREAR VALIDADOR
+    public JwtAuthenticationResponse saveUser(@RequestBody UserDTORequest userDto) {
         log.info("start saveUser for: " + userDto.toString());
         User user = userUtils.convertDtoToEntity(userDto);
         user = userRepository.save(user);
         UserDTOResponse newUserDto = userUtils.convertEntityToDto(user);
+        String token = this.userUtils.getToken(userDto);
         log.info("end saveUser:" + newUserDto.toString());
-        return newUserDto;
+        return new JwtAuthenticationResponse(token, newUserDto);
     }
 }
