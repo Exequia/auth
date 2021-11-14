@@ -1,5 +1,7 @@
 package are.auth.entities.bets;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +29,7 @@ public class Bet {
     private BetProfile profile;
 
     private String fields;
-    
+
     private String model;
 
     private String result;
@@ -35,4 +37,8 @@ public class Bet {
     @JoinColumn(name = "status_id")
     @ManyToOne(optional = false, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private BetStatus status;
+
+    private Date startDate;
+
+    private Date endDate;
 }

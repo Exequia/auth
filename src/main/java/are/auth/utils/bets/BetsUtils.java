@@ -1,7 +1,10 @@
 package are.auth.utils.bets;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -20,6 +23,7 @@ import are.auth.entities.bets.BetsUsersId;
 import are.auth.repositories.bets.IBetsBetsRepository;
 import are.auth.repositories.bets.IBetsOwnersRepository;
 import are.auth.repositories.bets.IBetsRepository;
+import are.auth.repositories.bets.IBetsStatusRepository;
 import are.auth.services.UserAuthDetailsService;
 import are.auth.utils.roles.IRoleUtils;
 
@@ -50,6 +54,9 @@ public class BetsUtils implements IBetsUtils {
 
     @Autowired
     private UserAuthDetailsService uathService;
+
+    @Autowired
+    private IBetsStatusRepository betsStatusRepository;
 
     @Override
     public BetDTO convertEntityToDto(Bet bet) throws ParseException {
@@ -115,8 +122,12 @@ public class BetsUtils implements IBetsUtils {
     }
 
     @Override
-    public AddBet addBet(AddBet addBet) {
-        return this.betsBetsRepository.save(addBet);
+    public void addBet(AddBetDTO addBetDto) {
+        AddBet addBet = this.convertDtoToEntity(addBetDto);
+        User loggedUser = uathService.getLoggedUser();
+        addBet.setDate(new Date());
+        addBet.setBetsUsersId(new BetsUsersId(addBetDto.getBetId(), loggedUser.getId()));
+        this.betsBetsRepository.save(addBet);
     }
 
     @Override
@@ -127,5 +138,29 @@ public class BetsUtils implements IBetsUtils {
         AddBetDTO addBetDTO = this.convertEntityToDto(addBet.get());
         addBetDTO.setBetData(betDto);
         return addBetDTO;
+    }
+
+    @Override
+    public List<BetDTO> getOpenBets() {
+        Iterable<Bet> bets = betsRepository.findByStatus(betsStatusRepository.findById(1L).get());
+        // this.addBetsLinked(bets);
+        List<BetDTO> betsDto = StreamSupport.stream(bets.spliterator(), false)
+                .map((bet) -> this.convertEntityToDto(bet)).collect(Collectors.toList());
+        return this.addBetsLinked(betsDto);
+    }
+
+    @Override
+    public List<BetDTO> addBetsLinked(Iterable<BetDTO> betsDto) {
+        User loggedUser = uathService.getLoggedUser();
+        return StreamSupport.stream(betsDto.spliterator(), false).map((betDto) -> setAddedBet(betDto, loggedUser)).collect(Collectors.toList());
+    }
+
+    @Override
+    public BetDTO setAddedBet(BetDTO betDto, User loggedUser) {
+        AddBet addedBet = this.betsBetsRepository.findById(new BetsUsersId(betDto.getId(), loggedUser.getId())).orElse(null);
+        if (null != addedBet) {
+            betDto.setAddedBet(addedBet.getModel());
+        }
+        return betDto;
     }
 }

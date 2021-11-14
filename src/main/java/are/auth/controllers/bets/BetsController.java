@@ -53,12 +53,10 @@ public class BetsController implements IBetsController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Override
-    public List<BetDTO> getBets() {
-        log.info("start getBets");
-        Iterable<Bet> bets = betsRepository.findAll();
-        List<BetDTO> betsDTO = StreamSupport.stream(bets.spliterator(), false)
-                .map((bet) -> betsUtils.convertEntityToDto(bet)).collect(Collectors.toList());
-        log.info("end getBets with: " + bets.toString());
+    public List<BetDTO> getOpenBets() {
+        log.info("start getOpenBets");
+        List<BetDTO> betsDTO = betsUtils.getOpenBets();
+        log.info("end getOpenBets with: " + betsDTO.toString());
         return betsDTO;
     }
 
@@ -88,13 +86,10 @@ public class BetsController implements IBetsController {
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public AddBetDTO addBet(@RequestBody AddBetDTO addBetDto) {
+    public void addBet(@RequestBody AddBetDTO addBetDto) {
         log.info("start addBet for: " + addBetDto.toString());
-        AddBet addBet = betsUtils.convertDtoToEntity(addBetDto);
-        addBet = betsUtils.addBet(addBet);
-        addBetDto.setDate(addBet.getDate());
+        betsUtils.addBet(addBetDto);
         log.info("end addBet:" + addBetDto.toString());
-        return addBetDto;
     }
     
     @Override

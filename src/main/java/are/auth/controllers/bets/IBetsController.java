@@ -12,13 +12,13 @@ public interface IBetsController {
 
     public BetDTO saveBet(@RequestBody BetDTO betDto);
 
-    public List<BetDTO> getBets();
+    public List<BetDTO> getOpenBets();
 
     public BetDTO findById(@PathVariable Long id);
 
     public void deleteById(@PathVariable Long id);
 
-    public AddBetDTO addBet(@RequestBody AddBetDTO addBetDto);
+    public void addBet(@RequestBody AddBetDTO addBetDto);
 
     public AddBetDTO findAddedBet(@PathVariable Long betId, @PathVariable Long userId);
 }

@@ -1,9 +1,12 @@
 package are.auth.utils.bets;
 
+import java.util.List;
+
 import org.springframework.expression.ParseException;
 
 import are.auth.dtos.bets.AddBetDTO;
 import are.auth.dtos.bets.BetDTO;
+import are.auth.entities.User;
 import are.auth.entities.bets.AddBet;
 import are.auth.entities.bets.Bet;
 import are.auth.entities.bets.BetsOwners;
@@ -22,8 +25,14 @@ public interface IBetsUtils {
 
     public BetsOwners saveOwners(Bet bet);
 
-    public AddBet addBet(AddBet addBet);
+    public void addBet(AddBetDTO addBetDto);
 
     public AddBetDTO findAddedBet(Long betId, Long userId);
+
+    public List<BetDTO> getOpenBets();
+
+    public List<BetDTO> addBetsLinked(Iterable<BetDTO> betsDto);
+
+    public BetDTO setAddedBet(BetDTO betDto, User loggedUser);
 
 }

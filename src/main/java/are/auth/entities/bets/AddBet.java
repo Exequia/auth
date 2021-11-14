@@ -26,7 +26,7 @@ public class AddBet {
     private BetsUsersId betsUsersId;
 
     @Value("")
-    private String bet;
+    private String model;
 
     private Date date = new Date();
 }
