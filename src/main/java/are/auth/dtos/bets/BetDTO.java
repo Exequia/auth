@@ -16,10 +16,15 @@ public class BetDTO {
 
     private Long profileId;
 
-    private String config;
+    private String fields;
+    
+    private String model;
     
     private String result;
     
     @Value("${bet.status.id}")
     private Long statusId;
+
+    
+    // private Date startDate;
 }

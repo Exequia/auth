@@ -26,7 +26,9 @@ public class Bet {
     @ManyToOne(optional = true, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private BetProfile profile;
 
-    private String config;
+    private String fields;
+    
+    private String model;
 
     private String result;
 
