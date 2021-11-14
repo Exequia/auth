@@ -1,8 +1,6 @@
 package are.auth.utils.bets;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -13,7 +11,6 @@ import org.springframework.expression.ParseException;
 
 import are.auth.dtos.bets.AddBetDTO;
 import are.auth.dtos.bets.BetDTO;
-import are.auth.entities.Role;
 import are.auth.entities.User;
 import are.auth.entities.bets.AddBet;
 import are.auth.entities.bets.Bet;
@@ -23,7 +20,7 @@ import are.auth.entities.bets.BetsUsersId;
 import are.auth.repositories.bets.IBetsBetsRepository;
 import are.auth.repositories.bets.IBetsOwnersRepository;
 import are.auth.repositories.bets.IBetsRepository;
-import are.auth.repositories.users.IUserRepository;
+import are.auth.services.UserAuthDetailsService;
 import are.auth.utils.roles.IRoleUtils;
 
 public class BetsUtils implements IBetsUtils {
@@ -42,14 +39,17 @@ public class BetsUtils implements IBetsUtils {
     @Autowired
     private IBetsOwnersRepository betsOwnersRepository;
 
-    @Autowired
-    private IUserRepository userRepository;
+    // @Autowired
+    // private IUserRepository userRepository;
 
     @Autowired
     private IBetsBetsRepository betsBetsRepository;
 
     @Autowired
     private IRoleUtils roleUtils;
+
+    @Autowired
+    private UserAuthDetailsService uathService;
 
     @Override
     public BetDTO convertEntityToDto(Bet bet) throws ParseException {
@@ -85,7 +85,8 @@ public class BetsUtils implements IBetsUtils {
         if (addBet.getBetsUsersId() == null) {
             BetsUsersId betsUsersId = new BetsUsersId(addBetDto.getBetId(), addBetDto.getUserId());
             addBet.setBetsUsersId(betsUsersId);
-        };
+        }
+        ;
         if (addBet.getDate() == null) {
             addBet.setDate(new Date());
         }
@@ -96,22 +97,21 @@ public class BetsUtils implements IBetsUtils {
     @Override
     public Bet save(Bet bet) {
         bet = betsRepository.save(bet);
-        // Iterable<User> owners = this.saveOwners(bet);
+        this.saveOwners(bet);
         return bet;
     }
 
     @Override
-    public Iterable<User> saveOwners(Bet bet) {
-        // TODO: No es funcional, puesto que pueden modificarse roles a posteriory. hay
-        // que cogerlo del modelo apuesta
-        List<Role> superRoles = this.roleUtils.getRolesByIds(Arrays.asList(1L, 2L));
-        Iterable<User> owners = this.userRepository.findAllByRoleIn(superRoles);
+    public BetsOwners saveOwners(Bet bet) {
+        // owners.forEach((owner) -> {
+        // BetsOwners betOwners = new BetsOwners(new BetsUsersId(bet.getId(),
+        // owner.getId()));
+        // this.betsOwnersRepository.save(betOwners);
+        // });
 
-        owners.forEach((owner) -> {
-            BetsOwners betOwners = new BetsOwners(new BetsUsersId(bet.getId(), owner.getId()));
-            this.betsOwnersRepository.save(betOwners);
-        });
-        return owners;
+        User loggedUser = uathService.getLoggedUser();
+        BetsOwners betOwners = new BetsOwners(new BetsUsersId(bet.getId(), loggedUser.getId()));
+        return this.betsOwnersRepository.save(betOwners);
     }
 
     @Override
