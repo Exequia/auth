@@ -35,4 +35,6 @@ public interface IBetsUtils {
 
     public BetDTO setAddedBet(BetDTO betDto, User loggedUser);
 
+    public void close(AddBetDTO betResults);
+
 }

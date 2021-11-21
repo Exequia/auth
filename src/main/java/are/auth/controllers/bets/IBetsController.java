@@ -21,4 +21,6 @@ public interface IBetsController {
     public void addBet(@RequestBody AddBetDTO addBetDto);
 
     public AddBetDTO findAddedBet(@PathVariable Long betId, @PathVariable Long userId);
+
+    public void close(@RequestBody AddBetDTO betResults);
 }

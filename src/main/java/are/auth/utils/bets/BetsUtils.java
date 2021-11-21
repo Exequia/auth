@@ -1,5 +1,6 @@
 package are.auth.utils.bets;
 
+import java.security.InvalidParameterException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -161,6 +162,32 @@ public class BetsUtils implements IBetsUtils {
         if (null != addedBet) {
             betDto.setAddedBet(addedBet.getModel());
         }
+        BetsUsersId betKey = new BetsUsersId(betDto.getId(), loggedUser.getId());
+        if (null != betKey &&  this.betsOwnersRepository.existsByBetsUsersId(betKey)) {
+            betDto.setOwnerId(0L);
+        } else {
+            betDto.setOwnerId(null);
+        }
         return betDto;
+    }
+
+    @Override
+    public void close(AddBetDTO betResults) throws InvalidParameterException {
+        Optional<Bet> optionalBet = betsRepository.findById(betResults.getBetId());
+        if (null != optionalBet) {
+            User loggedUser = uathService.getLoggedUser();
+            Bet bet = optionalBet.get();
+            BetsUsersId betKey = new BetsUsersId(betResults.getBetId(), loggedUser.getId());
+            if (null != betKey &&  this.betsOwnersRepository.existsByBetsUsersId(betKey)) {
+                bet.setEndDate(new Date());
+                bet.setStatus(betsStatusRepository.findById(3L).get());
+                bet.setResult(betResults.getModel());
+                betsRepository.save(bet);
+            } else {
+                throw new InvalidParameterException("betIdNotExists");
+            }
+        } else {
+            throw new InvalidParameterException("betIdNotExists");
+        }
     }
 }

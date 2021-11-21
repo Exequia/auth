@@ -32,4 +32,6 @@ public class BetDTO {
     private Date endDate;
 
     private String addedBet;
+    
+    private Long ownerId;
 }

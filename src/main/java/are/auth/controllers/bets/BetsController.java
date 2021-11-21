@@ -2,8 +2,6 @@ package are.auth.controllers.bets;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import are.auth.dtos.bets.AddBetDTO;
 import are.auth.dtos.bets.BetDTO;
-import are.auth.entities.bets.AddBet;
 import are.auth.entities.bets.Bet;
 import are.auth.repositories.bets.IBetsRepository;
 import are.auth.utils.bets.IBetsUtils;
@@ -101,5 +98,15 @@ public class BetsController implements IBetsController {
         AddBetDTO addBetDTO = betsUtils.findAddedBet(betId, userId);
         log.info("end findAddedBet with: " + addBetDTO.toString());
         return addBetDTO;
+    }
+
+    @Override
+    @PostMapping("/close")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void close(@RequestBody AddBetDTO betResults) {
+        log.info("start close for: " + betResults.toString());
+        betsUtils.close(betResults);
+        log.info("end close:" + betResults.toString());
     }
 }
