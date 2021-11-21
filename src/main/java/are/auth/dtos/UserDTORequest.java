@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class UserDTORequest extends UserDTO {
 
-    @NotBlank(message = "The alias name is required.")
+    @NotBlank(message = "passwordRequired.")
     private String password;
 }

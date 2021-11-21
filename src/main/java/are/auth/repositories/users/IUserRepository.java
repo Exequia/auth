@@ -15,4 +15,6 @@ public interface IUserRepository extends CrudRepository<User, Long> {
     public Iterable<User> findAllByRole(Role role);
 
     public Iterable<User> findAllByRoleIn(List<Role> roles);
+
+    public Boolean existsByEmail(String email);
 }

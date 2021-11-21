@@ -21,6 +21,6 @@ public class InvalidLoginAttemptHandler implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
             AuthenticationException e) throws IOException, ServletException {
         log.info("Invalid Login Attempt !!!!");
-        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+        httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "badCredentials");
     }
 }

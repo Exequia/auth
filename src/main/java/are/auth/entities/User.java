@@ -11,10 +11,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-// import lombok.Data;
+import lombok.Data;
 
-// @Data
+@Data
 @Entity
 @Table(name = "users")
 public class User {
@@ -22,9 +25,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @NotBlank(message = "emailRequired.")
+    @Email(message = "email should be a valid email")
     @Column(unique=true)
+    // @Column(name = "unique_key_field", nullable = false, unique = true)
     private String email;
+    
+    @NotNull(message = "aliasNotNull")
+    @NotBlank(message = "aliasNotBlank.")
     private String password;
+    
+    @NotNull(message = "aliasNotNull")
+    @NotBlank(message = "aliasNotBlank.")
     private String alias;
 
     @JoinColumn(name = "role_id")

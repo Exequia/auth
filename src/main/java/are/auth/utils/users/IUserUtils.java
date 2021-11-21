@@ -16,4 +16,6 @@ public interface IUserUtils {
     public String getToken(UserDTORequest userDto);
 
     public String getToken(AuthenticateRequest authenticateRequest);
+    
+    public User saveUser(UserDTORequest userDto);
 }

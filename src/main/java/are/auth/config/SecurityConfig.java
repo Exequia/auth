@@ -25,6 +25,8 @@ import are.auth.services.UserAuthDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    
+    private final String[] ignoreUrls = {"/authenticate/**", "/users/**", "/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/v2/api-docs"};
 
     @Autowired
     private UserAuthDetailsService userAuthDetailsService;
@@ -51,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().exceptionHandling().authenticationEntryPoint(invalidLoginAttemptHandler)
-                .and().authorizeRequests().antMatchers(HttpMethod.POST, "/authenticate/**", "/users/**").permitAll()
+                .and().authorizeRequests().antMatchers(HttpMethod.POST, ignoreUrls).permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

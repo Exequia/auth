@@ -1,5 +1,6 @@
 package are.auth.controllers.users;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.expression.ParseException;
 
 import are.auth.dtos.UserDTO;
 import are.auth.dtos.UserDTORequest;
@@ -68,10 +70,9 @@ public class UserController implements IUserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public JwtAuthenticationResponse saveUser(@RequestBody UserDTORequest userDto) {
+    public JwtAuthenticationResponse saveUser(@RequestBody UserDTORequest userDto) throws ParseException, InvalidParameterException {
         log.info("start saveUser for: " + userDto.toString());
-        User user = userUtils.convertDtoToEntity(userDto);
-        user = userRepository.save(user);
+        User user = this.userUtils.saveUser(userDto);
         UserDTOResponse newUserDto = userUtils.convertEntityToDto(user);
         String token = this.userUtils.getToken(userDto);
         log.info("end saveUser:" + newUserDto.toString());
