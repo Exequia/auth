@@ -43,7 +43,7 @@ public class JWTTokenProvider {
         List<String> roles = userPrincipal.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        return Jwts.builder().setIssuer("Are BE Users").setSubject(userPrincipal.getUsername()).setIssuedAt(new Date())
+        return Jwts.builder().setIssuer("Are BE App").setSubject(userPrincipal.getUsername()).setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationInMs * 10000)).claim("Roles", roles)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
     }

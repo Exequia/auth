@@ -1,5 +1,6 @@
 package are.auth.models;
 
+import are.auth.dtos.UserDTOResponse;
 import lombok.Data;
 
 @Data
@@ -7,9 +8,13 @@ public class JwtAuthenticationResponse {
 
     private String accessToken;
     private final String tokenType = "Bearer";
+    private UserDTOResponse user;
 
-    public JwtAuthenticationResponse(String accessToken) {
+    public JwtAuthenticationResponse() {}
+
+    public JwtAuthenticationResponse(String accessToken, UserDTOResponse user) {
         this.accessToken = accessToken;
+        this.user = user;
     }
 
     public String getAccessToken() {

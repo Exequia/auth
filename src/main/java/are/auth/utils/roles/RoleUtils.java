@@ -1,5 +1,8 @@
 package are.auth.utils.roles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +11,7 @@ import org.springframework.expression.ParseException;
 
 import are.auth.dtos.RoleDTO;
 import are.auth.entities.Role;
+import are.auth.repositories.roles.IRoleRepository;
 
 public class RoleUtils implements IRoleUtils {
 
@@ -15,6 +19,9 @@ public class RoleUtils implements IRoleUtils {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private IRoleRepository roleRepository;
 
     @Override
     public RoleDTO convertEntityToDto(Role role) throws ParseException {
@@ -30,6 +37,14 @@ public class RoleUtils implements IRoleUtils {
         Role role = modelMapper.map(roleDto, Role.class);
         log.info("start convertDtoToEntity: " + role.toString());
         return role;
+    }
+
+    @Override
+    public List<Role> getRolesByIds(List<Long> rolesIds) { 
+        Iterable<Role> superRoles = this.roleRepository.findAllByIdIn(rolesIds);
+        List<Role> roles = new ArrayList<Role>();
+        superRoles.forEach(roles::add);
+        return  roles;
     }
 
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class AuthenticateRequest {
-    private String userEmail;
+    private String email;
     private String password;
 }

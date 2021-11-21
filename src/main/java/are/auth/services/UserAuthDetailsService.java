@@ -8,18 +8,22 @@ import org.springframework.stereotype.Component;
 import are.auth.entities.User;
 import are.auth.models.UserPrincipal;
 import are.auth.repositories.users.IUserRepository;
+import lombok.Data;
 
+@Data
 @Component
 public class UserAuthDetailsService implements UserDetailsService {
 
     @Autowired
     private IUserRepository userRepository;
 
+    private User loggedUser;
+
     @Override
     public UserPrincipal loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-        User user = userRepository
+        this.loggedUser = userRepository
                 .findByEmail(userEmail)
                 .orElseThrow(() -> new UsernameNotFoundException("User name " + userEmail + "Not Found in DB"));
-        return UserPrincipal.create(user);
+        return UserPrincipal.create(this.loggedUser);
     }
 }
