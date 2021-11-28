@@ -37,4 +37,6 @@ public interface IBetsUtils {
 
     public void close(AddBetDTO betResults);
 
+    public BetDTO allBets(Long betId);
+
 }

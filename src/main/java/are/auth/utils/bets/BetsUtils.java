@@ -27,6 +27,7 @@ import are.auth.repositories.bets.IBetsRepository;
 import are.auth.repositories.bets.IBetsStatusRepository;
 import are.auth.services.UserAuthDetailsService;
 import are.auth.utils.roles.IRoleUtils;
+import are.auth.utils.users.IUserUtils;
 
 public class BetsUtils implements IBetsUtils {
 
@@ -58,6 +59,9 @@ public class BetsUtils implements IBetsUtils {
 
     @Autowired
     private IBetsStatusRepository betsStatusRepository;
+
+    @Autowired
+    private IUserUtils userUtils;
 
     @Override
     public BetDTO convertEntityToDto(Bet bet) throws ParseException {
@@ -189,5 +193,23 @@ public class BetsUtils implements IBetsUtils {
         } else {
             throw new InvalidParameterException("betIdNotExists");
         }
+    }
+
+    @Override
+    public BetDTO allBets(Long betId) {
+        Optional<Bet> bet = betsRepository.findById(betId);
+        BetDTO betDto = this.convertEntityToDto(bet.get());
+
+        List<AddBet> allbets = this.betsBetsRepository.findByBetsUsersIdBetId(betId);
+        List<AddBetDTO> allBetsDto = StreamSupport.stream(allbets.spliterator(), false)
+                .map((betBet) -> {
+                    Optional<User> user = this.userUtils.findUserById(betBet.getBetsUsersId().getUserId());
+                    AddBetDTO addBetDTO = this.convertEntityToDto(betBet);
+                    addBetDTO.setUserName(user.get().getAlias());
+                    return addBetDTO;
+                }).collect(Collectors.toList());
+        betDto.setAllBets(allBetsDto);
+        
+        return betDto;
     }
 }

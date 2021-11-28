@@ -19,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import are.auth.dtos.RoleDTO;
+import are.auth.dtos.UserDTO;
 import are.auth.dtos.UserDTORequest;
 import are.auth.dtos.UserDTOResponse;
 import are.auth.dtos.UserStatusDTO;
@@ -49,6 +50,17 @@ public class UserUtils implements IUserUtils {
 
     @Autowired
     private JWTTokenProvider jwtTokenProvider;
+
+    @Override
+    public UserDTO findDtoById(Long id) {
+        Optional<User> user = findUserById(id);
+        return this.convertEntityToDto(user.get());
+    }
+
+    @Override
+    public Optional<User> findUserById(Long id) {
+        return userRepository.findById(id);
+    }
 
     @Override
     public UserDTOResponse convertEntityToDto(User user) throws ParseException {
@@ -106,8 +118,9 @@ public class UserUtils implements IUserUtils {
     }
 
     private void validateDTO(UserDTORequest userDto) throws InvalidParameterException {
-        if (null == userDto.getEmail()){
-            throw new InvalidParameterException("emailNotNull");}
+        if (null == userDto.getEmail()) {
+            throw new InvalidParameterException("emailNotNull");
+        }
         if (userRepository.existsByEmail(userDto.getEmail()))
             throw new InvalidParameterException("emailExists");
         if (null == userDto.getAlias())

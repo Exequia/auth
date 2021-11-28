@@ -109,4 +109,15 @@ public class BetsController implements IBetsController {
         betsUtils.close(betResults);
         log.info("end close:" + betResults.toString());
     }
+    
+    @Override
+    @GetMapping("/allBets/{betId}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public BetDTO allBets(@PathVariable Long betId) {
+        log.info("start allBets for betId: " + betId);
+        BetDTO betDto = betsUtils.allBets(betId);
+        log.info("end allBets with: " + betDto.toString());
+        return betDto;
+    }
 }
