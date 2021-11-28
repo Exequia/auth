@@ -1,6 +1,7 @@
 package are.auth.dtos.bets;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
@@ -34,4 +35,6 @@ public class BetDTO {
     private String addedBet;
     
     private Long ownerId;
+    
+    private List<AddBetDTO> allBets;
 }

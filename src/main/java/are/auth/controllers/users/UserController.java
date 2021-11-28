@@ -60,8 +60,7 @@ public class UserController implements IUserController {
     @ResponseBody
     public UserDTO findByid(@PathVariable Long id) {
         log.info("start findByid for id: " + id);
-        Optional<User> user = userRepository.findById(id);
-        UserDTO userDto = userUtils.convertEntityToDto(user.get());
+        UserDTO userDto = userUtils.findDtoById(id);
         log.info("end findByid with: " + userDto.toString());
         return userDto;
     }

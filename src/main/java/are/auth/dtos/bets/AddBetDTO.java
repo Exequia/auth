@@ -14,6 +14,8 @@ public class AddBetDTO {
     @NotBlank(message = "addBetUserIdRequired")
     private Long userId;
 
+    private String userName;
+
     @NotBlank(message = "addBetBetModelRequired")
     private String model;
 
