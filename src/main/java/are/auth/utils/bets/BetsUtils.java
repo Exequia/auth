@@ -168,7 +168,7 @@ public class BetsUtils implements IBetsUtils {
         }
         BetsUsersId betKey = new BetsUsersId(betDto.getId(), loggedUser.getId());
         if (null != betKey &&  this.betsOwnersRepository.existsByBetsUsersId(betKey)) {
-            betDto.setOwnerId(0L);
+            betDto.setOwnerId(loggedUser.getId());
         } else {
             betDto.setOwnerId(null);
         }
@@ -199,6 +199,8 @@ public class BetsUtils implements IBetsUtils {
     public BetDTO allBets(Long betId) {
         Optional<Bet> bet = betsRepository.findById(betId);
         BetDTO betDto = this.convertEntityToDto(bet.get());
+        User loggedUser = uathService.getLoggedUser();
+        System.out.println(loggedUser.toString());
 
         List<AddBet> allbets = this.betsBetsRepository.findByBetsUsersIdBetId(betId);
         List<AddBetDTO> allBetsDto = StreamSupport.stream(allbets.spliterator(), false)
@@ -206,6 +208,10 @@ public class BetsUtils implements IBetsUtils {
                     Optional<User> user = this.userUtils.findUserById(betBet.getBetsUsersId().getUserId());
                     AddBetDTO addBetDTO = this.convertEntityToDto(betBet);
                     addBetDTO.setUserName(user.get().getAlias());
+                    if(loggedUser.getId().equals(addBetDTO.getUserId())) {
+                        addBetDTO.setIsMine(true);
+                    }
+
                     return addBetDTO;
                 }).collect(Collectors.toList());
         betDto.setAllBets(allBetsDto);
