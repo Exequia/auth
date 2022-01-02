@@ -25,4 +25,6 @@ public interface IBetsController {
     public void close(@RequestBody AddBetDTO betResults);
 
     public BetDTO allBets(@PathVariable Long betId);
+
+    public List<BetDTO> getClosedBets();
 }

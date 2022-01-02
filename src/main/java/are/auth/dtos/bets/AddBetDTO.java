@@ -22,4 +22,6 @@ public class AddBetDTO {
     private Date date;
 
     private BetDTO betData;
+
+    private Boolean isMine;
 }
