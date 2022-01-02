@@ -9,9 +9,7 @@ import are.auth.entities.bets.BetsUsersId;
 
 public interface IBetsBetsRepository extends CrudRepository<AddBet, BetsUsersId> {
 
-    // List<AddBet> findAllByBetId(Long betId);
-
-    // List<AddBet> findByBetsUsersId(BetsUsersId betsUsersId);
     List<AddBet> findByBetsUsersIdBetId(Long betId);
+    List<AddBet> findByBetsUsersIdUserId(Long userId);
 
 }

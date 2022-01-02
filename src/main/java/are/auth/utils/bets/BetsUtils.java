@@ -212,4 +212,13 @@ public class BetsUtils implements IBetsUtils {
         
         return betDto;
     }
+
+    @Override
+    public List<BetDTO> getClosedBets() {
+        User loggedUser = uathService.getLoggedUser();
+        List<Bet> allBetsOfUser = this.betsRepository.findByUserIdAndBetStatus(loggedUser.getId(), 3L);
+        List<BetDTO> betsDto = StreamSupport.stream(allBetsOfUser.spliterator(), false)
+                .map((bet) -> this.convertEntityToDto(bet)).collect(Collectors.toList());
+        return this.addBetsLinked(betsDto);
+    }
 }

@@ -39,4 +39,5 @@ public interface IBetsUtils {
 
     public BetDTO allBets(Long betId);
 
+    public List<BetDTO> getClosedBets();
 }

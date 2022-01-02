@@ -120,4 +120,15 @@ public class BetsController implements IBetsController {
         log.info("end allBets with: " + betDto.toString());
         return betDto;
     }
+
+    @Override
+    @GetMapping("/closed")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<BetDTO> getClosedBets() {
+        log.info("start getClosedBets");
+        List<BetDTO> betsDTO = betsUtils.getClosedBets();
+        log.info("end getClosedBets with: " + betsDTO.toString());
+        return betsDTO;
+    }
 }
